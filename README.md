@@ -7,8 +7,7 @@ MIUI全机型充电加速(888系列可用)
 格式:
 45度=450
 
-#go编译命令:
+# go编译命令:
 ```bash
-cd go
-go build -ldflags="-s -w" -o charge-current run.go
+go build -ldflags="-s -w" -o charge-current ./go/run.go
 ```

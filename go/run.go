@@ -64,12 +64,11 @@ func uninstalltemperaturecontrol() {
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-videochat.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-yuanshen.conf")
     if temperature > temperaturewall {
-    shell("echo " + minimum + " > /data/adb/modules/acceleratedcharging/constant_charge_current")
+    shell("echo '" + minimum + "' > /data/adb/modules/acceleratedcharging/constant_charge_current")
     shell("rm -rf /data/vendor/thermal/config/*")
     fmt.Println("达到温度墙"+ temperaturewall)
     } else {
-        shell("echo " + great + " > /data/adb/modules/acceleratedcharging/constant_charge_current")
-        fmt.Println("已开启满速快充")
+        shell("echo '" + great + "' > /data/adb/modules/acceleratedcharging/constant_charge_current")
     }
     shell("umount /sys/class/power_supply/battery/constant_charge_current")
     shell("mount -o rw /data/adb/modules/acceleratedcharging/constant_charge_current /sys/class/power_supply/battery/constant_charge_current")
@@ -94,7 +93,7 @@ func main() {
             if dl {
                 if uon == 0 {
                     uninstalltemperaturecontrol()
-                    fmt.Println("已修改充电温控")
+                    fmt.Println("已开启满速充电")
                     uon = 1
                     ion = 0
                 }

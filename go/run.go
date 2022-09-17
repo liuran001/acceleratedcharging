@@ -84,7 +84,6 @@ func installtemperaturecontrol() {
 func main() {
     uon := 0
     ion := 0
-    sleeptime := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${sleep}"))
     for true {
             var batterystatus = shell("dumpsys battery")
             var dl = strings.Contains(batterystatus,"status: 2")
@@ -103,6 +102,6 @@ func main() {
                     uon = 0
                 }
             }
-        time.Sleep(time.Duration(sleeptime)*time.Second)
+        time.Sleep(time.Duration(5)*time.Second)
     }
 }

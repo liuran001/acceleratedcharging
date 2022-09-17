@@ -23,7 +23,6 @@ func uninstalltemperaturecontrol() {
     temperaturewall := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${temperaturewall}"))
     great := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${great}"))
     minimum := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${minimum}"))
-    shell("echo $( base64 -d <<< \"ZGFuZ2VyCg==\" )>/data/vendor/thermal/config/thermal.current.ini")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-4k.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-arvr.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-camera.conf")
@@ -58,6 +57,7 @@ func uninstalltemperaturecontrol() {
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-per-navigation.conf")
     shell("echo $( base64 -d <<< \"boFgrg4gvtcCzEOsftjlcg5OxGAYz62gCBthbPvh5Rh0IhF/vqRPtdlO9qRg1K+BNiEGrwiKJvqU Lmgww887XR6JnESBTI3DfKIvwR9WTn1CFp/vZm+F+hq+3PnKYdpAPhqXRbqrO0EuE8K6LShxrQ41 HxaOqFPHBWO47TL6eLygyUT0iQeZE3Nz+WrkZzYyEBjjmdmjitMxKkc9z/C9ToVIVviNkxatcK75 X9lfavA1fjUejqd87GCPlVCwSBmn+E1cfWyOn0nrPMc701jnFUGeEP6mTzClxiiQuAIi3vJSGLQ0 rSgGvNHFK7FPwuKnNCJveas3FVQJNuy5TG2kKB62dBOL/79GkAn8adbKZmWHXbbUcXObVsX72jjw LSb0lgYlkXmDKyUyFYircI7oNQMUfhVQYZjMs4/6rPjvIqcdV1Teoy3h+A81bcrt4rM40OYw7m6s CCIpmSeW06QL6GBs8bKuDzS24qmr0QSfwkkLykhUOQ5CKermH6CtHAFo3njcaP5iUVkcpJUxHmZI K/+GoOrFnOkfe4aUhg9geZz2tEW2WmBkm68ufxFoR1U2pkVQNasCQG1VFJTqkyHvH0vbVJjsp2XO 6vhw7ik54COpXBoI2y9TDLFUyXft1qpm3sDSt2OReRY/DEKSSN6xUy6tIYS7gmBjqlkwbVVs/go=\" )>/data/vendor/thermal/config/thermal-per-normal.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-per-video.conf")
+    shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-phone.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-phon.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-tgame.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-video.conf")
@@ -65,7 +65,7 @@ func uninstalltemperaturecontrol() {
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-yuanshen.conf")
     if temperature > temperaturewall {
     shell("echo '" + minimum + "' > /data/adb/modules/acceleratedcharging/constant_charge_current")
-    shell("rm -rf /data/vendor/thermal/config/*")
+    shell(". /data/adb/modules/acceleratedcharging/restore.sh")
     fmt.Println("达到温度墙"+ temperaturewall)
     } else {
         shell("echo '" + great + "' > /data/adb/modules/acceleratedcharging/constant_charge_current")
@@ -75,11 +75,8 @@ func uninstalltemperaturecontrol() {
 }
 
 func installtemperaturecontrol() {
-    shell("rm -rf /data/vendor/thermal/config/*")
-}
-
-func Equal2(s1, s2 string) bool {
-	return strings.ToLower(s1) == strings.ToLower(s2)
+    shell(". /data/adb/modules/acceleratedcharging/restore.sh")
+    shell("umount /sys/class/power_supply/battery/constant_charge_current")
 }
 
 

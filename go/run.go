@@ -102,6 +102,6 @@ func main() {
                     uon = 0
                 }
             }
-        time.Sleep(time.Duration(5)*time.Second)
+        time.Sleep(time.Duration(60)*time.Second)
     }
 }

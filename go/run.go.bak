@@ -83,7 +83,6 @@ func installtemperaturecontrol() {
 
 
 func main() {
-    installtemperaturecontrol()
     uon := 0
     ion := 0
     for true {

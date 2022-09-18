@@ -22,7 +22,6 @@ func uninstalltemperaturecontrol() {
     temperature := string(shell("cat /sys/class/power_supply/battery/temp"))
     temperaturewall := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${temperaturewall}"))
     great := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${great}"))
-    minimum := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${minimum}"))
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-4k.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-arvr.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-camera.conf")
@@ -63,8 +62,10 @@ func uninstalltemperaturecontrol() {
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-video.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-videochat.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-yuanshen.conf")
+    shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-india-phone.conf")
+    shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-chg-only.conf")
     if temperature > temperaturewall {
-    shell("echo '" + minimum + "' > /data/adb/modules/acceleratedcharging/constant_charge_current")
+    shell("umount /sys/class/power_supply/battery/constant_charge_current")
     shell(". /data/adb/modules/acceleratedcharging/restore.sh")
     fmt.Println("达到温度墙"+ temperaturewall)
     } else {

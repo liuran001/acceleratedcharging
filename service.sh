@@ -34,15 +34,6 @@ function enable_miui_powerkeeper(){
     fi
 }
 
-#重新启动mi_thermald，避免重启云温控失败
-function restart_mi_thermald(){
-    killall -15 mi_thermald
-    for i in $(which -a mi_thermald)
-    do
-        nohup "$i" >/dev/null 2>&1 &
-    done
-    echo 10 > /sys/class/thermal/thermal_message/sconfig
-}
 
 #重新启用电量与性能
 function call_cloud_conf_release(){
@@ -57,6 +48,5 @@ check_thermal_control_file
 enable_miui_powerkeeper
 call_cloud_conf_release
 mk_thermal_folder
-restart_mi_thermald
 
 nohup ${0%/*}/go/charge-current &

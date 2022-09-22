@@ -6,8 +6,13 @@ import (
     "time"
     "strings"
 )
+var (
+    temperaturewall string
+    great string
+    uon int
+    ion int
+)
 
-  
 func shell(command string) string{
     var output []byte
     var err error
@@ -20,8 +25,6 @@ func shell(command string) string{
 
 func uninstalltemperaturecontrol() {
     temperature := string(shell("cat /sys/class/power_supply/battery/temp"))
-    temperaturewall := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${temperaturewall}"))
-    great := string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${great}"))
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-4k.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-arvr.conf")
     shell("echo $( base64 -d <<< \"DPrretij42fIjnrsdemBUwo=\" )>/data/vendor/thermal/config/thermal-camera.conf")
@@ -80,30 +83,33 @@ func installtemperaturecontrol() {
     shell("umount /sys/class/power_supply/battery/constant_charge_current")
 }
 
-
+func updateconfig() {
+    temperaturewall = string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${temperaturewall}"))
+    great = string(shell(". /data/adb/modules/acceleratedcharging/config.ini && echo ${great}"))
+}
 
 func main() {
-    installtemperaturecontrol()
-    uon := 0
-    ion := 0
+    uon = 0
+    ion = 0
     for true {
-            var batterystatus = shell("dumpsys battery")
-            var dl = strings.Contains(batterystatus,"status: 2")
-            if dl {
-                if uon == 0 {
-                    uninstalltemperaturecontrol()
-                    fmt.Println("已开启满速充电")
-                    uon = 1
-                    ion = 0
-                }
-            } else {
-                if ion == 0 {
-                    installtemperaturecontrol()
-                    fmt.Println("已恢复充电温控")
-                    ion = 1
-                    uon = 0
-                }
+        updateconfig()
+        var batterystatus = shell("dumpsys battery")
+        var dl = strings.Contains(batterystatus,"status: 2")
+        if dl {
+            if uon == 0 {
+                uninstalltemperaturecontrol()
+                fmt.Println("已开启满速充电")
+                uon = 1
+                ion = 0
             }
+        } else {
+            if ion == 0 {
+                installtemperaturecontrol()
+                fmt.Println("已恢复充电温控")
+                ion = 1
+                uon = 0
+            }
+        }
         time.Sleep(time.Duration(60)*time.Second)
     }
 }

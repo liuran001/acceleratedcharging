@@ -1,15 +1,21 @@
 #!/system/bin/sh
 
-#重新建立MIUI云控目录
+. ${0%/*}/config.ini
+
 function mk_thermal_folder(){
     resetprop -p sys.thermal.data.path /data/vendor/thermal/
     resetprop -p vendor.sys.thermal.data.path /data/vendor/thermal/
-    chattr -R -i -a '/data/vendor/thermal'
-    rm -rf '/data/vendor/thermal'
-    mkdir -p '/data/vendor/thermal/config'
-    chmod -R 0771 '/data/vendor/thermal'
-    chown -R root:system '/data/vendor/thermal'
-    chcon -R 'u:object_r:vendor_data_file:s0' '/data/vendor/thermal'
+    chattr -R -i -a /data/vendor/thermal
+    if [ ! -d /data/vendor/thermal ];then
+        rm -rf /data/vendor/thermal
+        mkdir -p /data/vendor/thermal/config
+    fi
+    chmod 0771 /data/vendor/thermal
+    chmod 644 /data/vendor/thermal/config/*
+    chown root:system /data/vendor/thermal
+    chown root:system /data/vendor/thermal/config/*
+    chcon u:object_r:vendor_data_file:s0 /data/vendor/thermal
+    chcon u:object_r:vendor_data_file:s0 /data/vendor/thermal/config/*
 }
 
 #检查温控二进制文件！
@@ -34,7 +40,6 @@ function enable_miui_powerkeeper(){
     fi
 }
 
-
 #重新启用电量与性能
 function call_cloud_conf_release(){
     pm enable com.miui.powerkeeper/com.miui.powerkeeper.cloudcontrol.CloudUpdateReceiver >/dev/null 2>&1
@@ -49,4 +54,4 @@ enable_miui_powerkeeper
 call_cloud_conf_release
 mk_thermal_folder
 
-nohup ${0%/*}/go/charge-current &
+nohup ${0%/*}/go/charge-current $speed $temperaturewall $timesleep &

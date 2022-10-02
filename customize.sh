@@ -1,5 +1,6 @@
 #!/system/bin/sh
 SKIPUNZIP=0
+rm -rf /data/thermal/
 ui_print "检测温控是否存在...."
 for i in `find "/vendor" -name "*thermal*.json" -o -name "*thermal*.conf" -type f`; do
     ui_print "$i" | fgrep -iq 'android.' && continue
